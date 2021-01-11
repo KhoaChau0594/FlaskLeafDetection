@@ -1,4 +1,4 @@
-_Hai file mô hình đã được huấn luyện quá nặng nên sẽ được trên drive ở địa chỉ sau:
+_Hai file mô hình đã được huấn luyện quá nặng nên sẽ được lưu trên drive ở địa chỉ sau:
 	https://drive.google.com/drive/folders/15UTcUdMfu-nAfVlQqVRYnFT8JLMlNSdq?usp=sharing
 	Tải hai file về và copy vào thư mục Flask/trained_model
 
