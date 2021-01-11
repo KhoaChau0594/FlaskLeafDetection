@@ -2,7 +2,7 @@ _Hai file mô hình đã được huấn luyện quá nặng nên sẽ được 
 	https://drive.google.com/drive/folders/15UTcUdMfu-nAfVlQqVRYnFT8JLMlNSdq?usp=sharing
 	Tải hai file về và copy vào thư mục Flask/trained_model
 
-_Tạo folder leaf_disease_app. Mở Terminal, dịch chuyển đến thư muck leaf_disease_app và nhập các lệnh sau:
+_Tạo folder leaf_disease_app. Copy file requirements.txt từ git vào thư mục vừa tạo. Mở Terminal, dịch chuyển đến thư muck leaf_disease_app và nhập các lệnh sau:
 	venv\Scripts\activate
 	pip install -r requirements.txt
 	
