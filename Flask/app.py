@@ -43,6 +43,13 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    # create need folder
+    if not os.path.isdir('uploadedImage'):
+        os.mkdir(r'.\uploadedImage') 
+
+    if not os.path.isdir('segmentedImage'):
+        os.mkdir(r'.\segmentedImage') 
+
     # before request
     @app.before_request
     def before_request():

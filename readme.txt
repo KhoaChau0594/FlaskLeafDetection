@@ -2,6 +2,14 @@ _Hai file mô hình đã được huấn luyện quá nặng nên sẽ được 
 	https://drive.google.com/drive/folders/15UTcUdMfu-nAfVlQqVRYnFT8JLMlNSdq?usp=sharing
 	Tải hai file về và copy vào thư mục Flask/trained_model
 
+_Tạo virtual environment: 
+	Tạo folder leafDetection để tạo virtual environment.
+	Mở terminal, di chuyển đến folder vừa tạo, gõ lệnh
+	python -m venv venv
+ 
+
+
+
 _Mở Terminal, dịch chuyển đến folder lưu ứng dụng hiện tại và nhập các lệnh sau:
 venv\Scripts\activate
 pip install -r requirements.txt
