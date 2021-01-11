@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Leaf Disease Detection</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/homepage.css') }}">
+</head>
+
+<body>
+    <div class="file-upload">
+        <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add
+            Image</button>
+
+        <div class="image-upload-wrap">
+            <input class="file-upload-input" type='file' id="file_input" onchange="readURL(this);" accept="image/*" />
+            <div class="drag-text" id="drag-text">
+                <h3>Drag and drop a file or select add Image</h3>
+            </div>
+        </div>
+        <div class="file-upload-content">
+            <img class="file-upload-image" src="#" alt="your image" />
+            <div class="image-title-wrap">
+                <button type="button" onclick="removeUpload()" class="remove-image">Remove <span
+                        class="image-title">Uploaded Image</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="result">
+        <button id="btn" class="file-upload-btn">Classify</button>
+        <div class="loader"></div>
+        <div id="res_wrapper" style="display: none;">
+            <p id="res"></p>
+            <p id="res_time"><span>Take:</span>&nbsp;<span id="take_time"></span><span>s</span></p>
+            <img id="segmented_image" src="" alt="">
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type=text/javascript src="{{url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script>
+        let current_img = null
+            // upload and preview image file
+        function readURL(input) {
+            removeResult()
+            var reader = new FileReader();
+
+            console.log(input.files, input.files[0])
+            if (input.files && input.files[0]) {
+                reader.onload = function(e) {
+                    $('.image-upload-wrap').hide();
+
+                    $('.file-upload-image').attr('src', e.target.result);
+                    $('.file-upload > .file-upload-btn').html('Change Image')
+                    $('.file-upload-content').show();
+
+                    $('.image-title').html(input.files[0].name);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+
+            } else {
+                removeUpload();
+            }
+        }
+
+        function removeUpload() {
+            $('.file-upload > .file-upload-btn').html('Add Image')
+            $('.file-upload-input').replaceWith($('.file-upload-input').clone());
+            $('.file-upload-content').hide();
+            $('.image-upload-wrap').show();
+            $('div#drag-text > img').remove();
+            $('.image-upload-wrap').removeClass('image-dropping');
+
+            // reset input field
+            $('.file-upload-input')[0].value = ''
+            $('.loader').hide()
+            removeResult()
+        }
+
+        $('.image-upload-wrap').bind('dragover', function() {
+            $('.image-upload-wrap').addClass('image-dropping');
+        });
+
+        $('.image-upload-wrap').bind('dragleave', function() {
+            $('.image-upload-wrap').removeClass('image-dropping');
+        });
+
+        function removeResult() {
+            $('#res_wrapper').hide();
+            $('#segmented_image').attr('src', '');
+        }
+    </script>
+
+    <!-- Upload file to sever -->
+    <script type=text/javascript>
+        $('#btn').bind('click', function() {
+            console.log('click')
+            var numOfFiles = $('#file_input')[0].files.length
+
+            if (numOfFiles < 1) {
+                alert('Choose at least one file')
+            } else {
+                $('#res_wrapper').show();
+                // upload image
+                var formData = new FormData();
+                var image = $('#file_input')[0].files[0]
+                var imgName = image.name
+                console.log(imgName)
+
+                // reset result
+                removeResult()
+
+                formData.append('image', image)
+
+                // $('.loader').show()
+
+                $.ajax({
+                    beforeSend: () => {
+                        $('.loader').show()
+                    },
+                    complete: () => {
+                        $('#res_wrapper').show();
+                        $('.loader').hide()
+                    },
+                    url: '/_classify', // point to server-side URL
+                    dataType: 'json', // what to expect back from server
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    type: 'post',
+                    success: function(response) { // display success response
+                        var formData2 = new FormData();
+                        formData2.append('imgName', imgName)
+
+                        console.log('success', response);
+                        $('p#res').text(response.result);
+                        // round number to 2 number after comma before set text
+                        $('#take_time').text((Math.round(response.time * 100) / 100).toFixed(2));
+
+                        if (response.result == 'lá khỏe mạnh - healthy') {
+                            return
+                        }
+                        // get segmented image
+                        $.ajax({
+                            url: '/get_segmented_image', // point to server-side URL
+                            contentType: 'multipart/form-data',
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            data: formData2,
+                            type: 'POST',
+                            success: function(response) { // display success response
+                                // console.log('success', response);
+                                $('#segmented_image').attr('src', 'data:image/JPG;base64,' + response);
+                            },
+                            error: function(response) {
+                                console.log('failed', response); // display error response
+                            }
+                        })
+                    },
+                    error: function(response) {
+                        console.log('failed', response); // display error response
+                        $('p#res').text('Error')
+                    }
+                })
+            }
+        });
+    </script>
+
+    <!-- Drag & Drop -->
+    <script>
+        function dropHandler(ev) {
+            console.log('File(s) dropped');
+
+            // Prevent default behavior (Prevent file from being opened)
+            ev.preventDefault();
+
+            if (ev.dataTransfer.items) {
+                // Use DataTransferItemList interface to access the file(s)
+                for (var i = 0; i < ev.dataTransfer.items.length; i++) {
+                    // If dropped items aren't files, reject them
+                    if (ev.dataTransfer.items[i].kind === 'file') {
+                        var file = ev.dataTransfer.items[i].getAsFile();
+                        console.log('... file[' + i + '].name = ' + file.name);
+                    }
+                }
+            } else {
+                // Use DataTransfer interface to access the file(s)
+                for (var i = 0; i < ev.dataTransfer.files.length; i++) {
+                    console.log('... file[' + i + '].name = ' + ev.dataTransfer.files[i].name);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
+
+</html>
