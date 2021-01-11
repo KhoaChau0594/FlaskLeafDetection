@@ -10,7 +10,7 @@ _Tạo folder leaf_disease_app. Copy file requirements.txt từ git vào thư m�
 
 _Tải project về, Copy vào thư mục FlaskLeafDetection-master vào thư mục leaf_disease_app.
 
-_Để chạy app gõ lênh, mở terminal, dịch chuyển đến thư mục FlaskLeafDetection-master và gõ lệnh:
+_Để chạy app gõ lênh, mở terminal, dịch chuyển đến thư mục FlaskLeafDetection-master/Flask và gõ lệnh:
 	$env:FLASK_APP = "app.py"
 	$env:FLASK_DEBUG = 1 
 	python -m flask run
