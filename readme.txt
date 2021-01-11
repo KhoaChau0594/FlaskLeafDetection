@@ -2,23 +2,6 @@ _Hai file mô hình đã được huấn luyện quá nặng nên sẽ được 
 	https://drive.google.com/drive/folders/15UTcUdMfu-nAfVlQqVRYnFT8JLMlNSdq?usp=sharing
 	Tải hai file về và copy vào thư mục Flask/trained_model
 
-<<<<<<< HEAD
-_Tạo virtual environment: 
-	Tạo folder leafDetection để tạo virtual environment.
-	Mở terminal, di chuyển đến folder vừa tạo, gõ lệnh
-	python -m venv venv
- 
-
-
-
-_Mở Terminal, dịch chuyển đến folder lưu ứng dụng hiện tại và nhập các lệnh sau:
-venv\Scripts\activate
-pip install -r requirements.txt
-cd Flask
-$env:FLASK_APP = "app.py"
-$env:FLASK_DEBUG = 1 
-python -m flask run
-=======
 _Tạo folder leaf_disease_app. Copy file requirements.txt từ git vào thư mục vừa tạo. Mở Terminal, dịch chuyển đến thư muck leaf_disease_app và nhập các lệnh sau:
 	python -m venv venv # để tạo môi trường ảo
 	venv\Scripts\activate # để activate môi trường ảo
@@ -31,4 +14,3 @@ _Để chạy app gõ lênh, mở terminal, dịch chuyển đến thư mục Fl
 	$env:FLASK_APP = "app.py"
 	$env:FLASK_DEBUG = 1 
 	python -m flask run
->>>>>>> 90f2bacd3a56313503d824814a5e99537581ecd5
